@@ -3,6 +3,13 @@ import { defineComponent } from "vue";
 import { IMovie } from "@/modules/movie";
 
 export default defineComponent({
+  data() {
+    return {
+      search: "",
+      debounceTimer: null as ReturnType<typeof setTimeout> | null,
+    };
+  },
+
   created() {
     this.loadMoreMovies();
   },
@@ -33,9 +40,24 @@ export default defineComponent({
     },
   },
 
+  watch: {
+    search() {
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer);
+      }
+
+      if (!this.isFetchingMovies) {
+        this.debounceTimer = setTimeout(() => {
+          this.$store.dispatch("movie/clearMovies");
+          this.loadMoreMovies();
+        }, 1000);
+      }
+    },
+  },
+
   methods: {
     loadMoreMovies() {
-      this.$store.dispatch("movie/fetchMovies");
+      this.$store.dispatch("movie/fetchMovies", this.search);
     },
   },
 });
@@ -43,6 +65,15 @@ export default defineComponent({
 
 <template>
   <el-container id="home-page">
+    <el-input
+      v-model="search"
+      :debounce="2000"
+      class="search-field"
+      placeholder="Search"
+      prefix-icon="el-icon-search"
+      :disabled="isFetchingMovies"
+    />
+
     <el-container class="movies-list">
       <el-card
         v-for="movie in movies"
@@ -71,11 +102,19 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
 
+  padding: 2rem 1rem;
+
+  .search-field {
+    max-width: 20rem;
+    margin-bottom: 2rem;
+    margin-left: auto;
+  }
+
   .movies-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 16rem);
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
     gap: 2rem 1rem;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     .movie-card {
       border-radius: 8px;

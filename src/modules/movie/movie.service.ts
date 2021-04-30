@@ -20,11 +20,13 @@ export class MovieService implements IMovieService {
           limit: payload.limit,
           page: payload.page,
           sort_by: payload.sortBy,
+          query_term: payload.search,
         },
       }
     );
 
     const data = response.data;
+    data.movies ??= [];
 
     const movies = data.movies.map(
       (movie) =>

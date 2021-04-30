@@ -31,6 +31,7 @@ export interface IMovieStoreMutations extends MutationTree<IMovieStoreState> {
   appendMovies: (state: IMovieStoreState, payload: Array<IMovie>) => void;
   setPage: (state: IMovieStoreState, payload: number) => void;
   setIsFetching: (state: IMovieStoreState, payload: boolean) => void;
+  setMovies: (state: IMovieStoreState, payload: Array<IMovie>) => void;
 }
 
 // Actions
@@ -39,7 +40,12 @@ export type IMovieStoreContext = ActionContext<IMovieStoreState, IStoreState>;
 
 export interface IMovieStoreActions
   extends ActionTree<IMovieStoreState, IStoreState> {
-  fetchMovies: (this: IStore, context: IMovieStoreContext) => Promise<void>;
+  clearMovies: (this: IStore, context: IMovieStoreContext) => void;
+  fetchMovies: (
+    this: IStore,
+    context: IMovieStoreContext,
+    search?: string
+  ) => Promise<void>;
 }
 
 // Store

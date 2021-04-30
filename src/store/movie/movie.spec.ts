@@ -2,6 +2,21 @@ import { mockMovies } from "@/modules/movie";
 import { mockMovieStore } from "@/store/movie";
 
 describe("Actions", () => {
+  describe("clearMovies()", () => {
+    it("should clear all movies and set page to 0", () => {
+      const movies = mockMovies();
+      const store = mockMovieStore();
+
+      store.state.movie.movies = movies;
+      store.state.movie.page = 1;
+
+      store.dispatch("movie/clearMovies");
+
+      expect(store.state.movie.movies).toEqual([]);
+      expect(store.state.movie.page).toEqual(0);
+    });
+  });
+
   describe("fetchMovies()", () => {
     it("should call getPaged method and store returned movies and page", async () => {
       const movies = mockMovies();

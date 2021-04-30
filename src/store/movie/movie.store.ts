@@ -24,6 +24,10 @@ export const movieStore: IMovieStore = {
   },
 
   mutations: {
+    setMovies(state: IMovieStoreState, payload: Array<IMovie>) {
+      state.movies = [...payload];
+    },
+
     appendMovies(state: IMovieStoreState, payload: Array<IMovie>) {
       payload.forEach((movie: IMovie) => state.movies.push(movie));
     },
@@ -38,12 +42,18 @@ export const movieStore: IMovieStore = {
   },
 
   actions: {
-    async fetchMovies(context: IMovieStoreContext) {
+    clearMovies(context: IMovieStoreContext) {
+      context.commit("setMovies", []);
+      context.commit("setPage", 0);
+    },
+
+    async fetchMovies(context: IMovieStoreContext, search?: string) {
       context.commit("setIsFetching", true);
 
       const { movies, page } = await this.$services.movie.getPaged({
         sortBy: "download_count",
         page: context.state.page + 1,
+        search,
       });
 
       context.commit("appendMovies", movies);

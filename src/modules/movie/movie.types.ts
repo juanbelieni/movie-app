@@ -28,6 +28,7 @@ export interface IMovieServiceGetPagedPayload {
   limit?: number;
   page?: number;
   sortBy?: string;
+  search?: string;
 }
 
 export interface IMovieServiceGetPagedResponse {
@@ -37,7 +38,7 @@ export interface IMovieServiceGetPagedResponse {
 
 export interface IMovieServiceGetPagedApiData {
   page_number: number;
-  movies: Array<{
+  movies?: Array<{
     id: number;
     title: string;
     year: number;

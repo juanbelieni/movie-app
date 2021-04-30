@@ -50,5 +50,16 @@ describe("Service", () => {
       const { movies } = await movieService.getPaged();
       expect(movies).toEqual(mockMovies());
     });
+
+    it("should return a empty array of movies if nothing comes from api response", async () => {
+      moxios.stubRequest("/list_movies.json", {
+        response: {
+          page_number: 1,
+        },
+      });
+
+      const { movies } = await movieService.getPaged();
+      expect(movies).toEqual([]);
+    });
   });
 });
