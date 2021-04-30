@@ -4,6 +4,7 @@ export interface IMovieData {
   id: number;
   title: string;
   year: number;
+  rating: number;
   genres: Array<string>;
 
   covers: {
@@ -40,6 +41,7 @@ export interface IMovieServiceGetPagedApiData {
     id: number;
     title: string;
     year: number;
+    rating: number;
     genres: Array<string>;
     small_cover_image: string;
     medium_cover_image: string;

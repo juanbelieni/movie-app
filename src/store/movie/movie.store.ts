@@ -9,8 +9,9 @@ export const movieStore: IMovieStore = {
   namespaced: true,
 
   state: {
-    page: 0,
     movies: [],
+    isFetching: false,
+    page: 0,
   },
 
   getters: {
@@ -18,6 +19,8 @@ export const movieStore: IMovieStore = {
 
     movie: (state: IMovieStoreState) => (id: number) =>
       state.movies.find((movie: IMovie) => movie.id === id),
+
+    isFetching: (state: IMovieStoreState) => state.isFetching,
   },
 
   mutations: {
@@ -28,10 +31,16 @@ export const movieStore: IMovieStore = {
     setPage(state: IMovieStoreState, payload: number) {
       state.page = payload;
     },
+
+    setIsFetching(state: IMovieStoreState, payload: boolean) {
+      state.isFetching = payload;
+    },
   },
 
   actions: {
     async fetchMovies(context: IMovieStoreContext) {
+      context.commit("setIsFetching", true);
+
       const { movies, page } = await this.$services.movie.getPaged({
         sortBy: "download_count",
         page: context.state.page + 1,
@@ -39,6 +48,7 @@ export const movieStore: IMovieStore = {
 
       context.commit("appendMovies", movies);
       context.commit("setPage", page);
+      context.commit("setIsFetching", false);
     },
   },
 };

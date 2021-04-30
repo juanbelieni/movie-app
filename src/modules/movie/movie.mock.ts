@@ -12,6 +12,7 @@ export const mockMoviesData = (): Array<IMovieData> => [
     id: 1,
     title: "title",
     year: 2021,
+    rating: 4,
     genres: ["a", "b", "c"],
     covers: {
       small: "small",
@@ -24,6 +25,7 @@ export const mockMoviesData = (): Array<IMovieData> => [
     id: 2,
     title: "title",
     year: 2021,
+    rating: 4,
     genres: ["a", "b", "c"],
     covers: {
       small: "small",
@@ -47,6 +49,7 @@ export const mockMovieServiceGetPagedApiData = (): IMovieServiceGetPagedApiData 
       id: 1,
       title: "title",
       year: 2021,
+      rating: 8,
       genres: ["a", "b", "c"],
       small_cover_image: "small",
       medium_cover_image: "medium",
@@ -57,6 +60,7 @@ export const mockMovieServiceGetPagedApiData = (): IMovieServiceGetPagedApiData 
       id: 2,
       title: "title",
       year: 2021,
+      rating: 8,
       genres: ["a", "b", "c"],
       small_cover_image: "small",
       medium_cover_image: "medium",

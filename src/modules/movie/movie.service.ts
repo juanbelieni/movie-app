@@ -32,6 +32,7 @@ export class MovieService implements IMovieService {
           id: movie.id,
           title: movie.title,
           year: movie.year,
+          rating: movie.rating / 2,
           genres: movie.genres,
           covers: {
             small: movie.small_cover_image,
