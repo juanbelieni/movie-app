@@ -74,7 +74,10 @@ export default defineComponent({
       :disabled="isFetchingMovies"
     />
 
-    <el-container class="movies-list">
+    <el-container
+      class="movies-list"
+      v-if="!isFetchingMovies && movies.length > 0"
+    >
       <el-card
         v-for="movie in movies"
         :key="movie.id"
@@ -93,6 +96,10 @@ export default defineComponent({
         </div>
       </el-card>
     </el-container>
+    <el-empty
+      description="No movies found :("
+      v-else-if="!isFetchingMovies && movies.length === 0"
+    />
     <div ref="bottom" class="loading-indicator" v-loading="isFetchingMovies" />
   </el-container>
 </template>
