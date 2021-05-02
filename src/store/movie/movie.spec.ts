@@ -1,4 +1,4 @@
-import { mockMovies } from "@/modules/movie";
+import { mockMovies, mockMovieService } from "@/modules/movie";
 import { mockMovieStore } from "@/store/movie";
 
 describe("Actions", () => {
@@ -22,11 +22,7 @@ describe("Actions", () => {
       const movies = mockMovies();
       const store = mockMovieStore();
       store.$services = {
-        ...store.$services,
-        movie: {
-          ...store.$services?.movie,
-          getPaged: jest.fn(),
-        },
+        movie: mockMovieService(),
       };
 
       store.$services.movie.getPaged = jest.fn().mockReturnValue({
@@ -63,10 +59,7 @@ describe("Actions", () => {
       const store = mockMovieStore();
       store.$services = {
         ...store.$services,
-        movie: {
-          ...store.$services?.movie,
-          getPaged: jest.fn(),
-        },
+        movie: mockMovieService(),
       };
 
       store.$services.movie.getPaged = jest
@@ -83,6 +76,40 @@ describe("Actions", () => {
       expect(store.state.movie.isFetching).toBeFalsy();
       await store.dispatch("movie/fetchMovies");
       expect(store.state.movie.isFetching).toBeFalsy();
+    });
+  });
+
+  describe("fetchMovie()", () => {
+    it("should call movie service when movie is not found in movies state", async () => {
+      const movies = mockMovies();
+      const store = mockMovieStore();
+      store.$services = {
+        movie: mockMovieService(),
+      };
+
+      console.log(mockMovieStore().state.movie);
+
+      store.$services.movie.getOne = jest.fn().mockReturnValue(movies[0]);
+
+      await store.dispatch("movie/fetchMovie", 1);
+
+      expect(store.$services.movie.getOne).toBeCalledWith(1);
+      expect(store.state.movie.movie).toEqual(movies[0]);
+    });
+
+    it("should not call movie service when movie is found in movies state", async () => {
+      const movies = mockMovies();
+      const store = mockMovieStore();
+      store.$services = {
+        movie: mockMovieService(),
+      };
+
+      store.state.movie.movies = movies;
+
+      await store.dispatch("movie/fetchMovie", 1);
+
+      expect(store.$services.movie.getOne).not.toBeCalled();
+      expect(store.state.movie.movie).toEqual(movies[0]);
     });
   });
 });
@@ -104,9 +131,9 @@ describe("Getters", () => {
       const movies = mockMovies();
       const store = mockMovieStore();
 
-      store.state.movie.movies = movies;
+      store.state.movie.movie = movies[0];
 
-      expect(store.getters["movie/movie"](movies[0].id)).toEqual(movies[0]);
+      expect(store.getters["movie/movie"]).toEqual(movies[0]);
     });
   });
 

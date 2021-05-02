@@ -2,6 +2,8 @@ import {
   IMovieData,
   IMovie,
   IMovieServiceGetPagedApiData,
+  IMovieServiceGetOneApiData,
+  IMovieService,
 } from "./movie.types";
 import { Movie } from "./movie.model";
 
@@ -13,6 +15,7 @@ export const mockMoviesData = (): Array<IMovieData> => [
     title: "title",
     year: 2021,
     rating: 4,
+    slug: "slug1",
     genres: ["a", "b", "c"],
     covers: {
       small: "small",
@@ -26,6 +29,7 @@ export const mockMoviesData = (): Array<IMovieData> => [
     title: "title",
     year: 2021,
     rating: 4,
+    slug: "slug2",
     genres: ["a", "b", "c"],
     covers: {
       small: "small",
@@ -50,6 +54,7 @@ export const mockMovieServiceGetPagedApiData = (): IMovieServiceGetPagedApiData 
       title: "title",
       year: 2021,
       rating: 8,
+      slug: "slug1",
       genres: ["a", "b", "c"],
       small_cover_image: "small",
       medium_cover_image: "medium",
@@ -61,6 +66,7 @@ export const mockMovieServiceGetPagedApiData = (): IMovieServiceGetPagedApiData 
       title: "title",
       year: 2021,
       rating: 8,
+      slug: "slug2",
       genres: ["a", "b", "c"],
       small_cover_image: "small",
       medium_cover_image: "medium",
@@ -68,4 +74,24 @@ export const mockMovieServiceGetPagedApiData = (): IMovieServiceGetPagedApiData 
       yt_trailer_code: "trailerId",
     },
   ],
+});
+
+export const mockMovieServiceGetOneApiData = (): IMovieServiceGetOneApiData => ({
+  movie: {
+    id: 1,
+    title: "title",
+    year: 2021,
+    rating: 8,
+    slug: "slug1",
+    genres: ["a", "b", "c"],
+    small_cover_image: "small",
+    medium_cover_image: "medium",
+    large_cover_image: "large",
+    yt_trailer_code: "trailerId",
+  },
+});
+
+export const mockMovieService = (): IMovieService => ({
+  getOne: jest.fn(),
+  getPaged: jest.fn(),
 });

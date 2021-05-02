@@ -5,6 +5,7 @@ export class Movie implements IMovie {
   title: string;
   year: number;
   rating: number;
+  slug: string;
   genres: Array<string>;
 
   covers: {
@@ -20,6 +21,7 @@ export class Movie implements IMovie {
     this.title = data.title;
     this.year = data.year;
     this.rating = data.rating;
+    this.slug = data.slug;
     this.genres = data.genres;
     this.covers = data.covers;
     this.trailerId = data.trailerId;

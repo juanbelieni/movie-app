@@ -3,6 +3,7 @@ import {
   mockMovies,
   mockMoviesData,
   mockMovieServiceGetPagedApiData,
+  mockMovieServiceGetOneApiData,
 } from "./movie.mock";
 import { MovieService } from "./movie.service";
 import axios, { AxiosInstance } from "axios";
@@ -60,6 +61,26 @@ describe("Service", () => {
 
       const { movies } = await movieService.getPaged();
       expect(movies).toEqual([]);
+    });
+  });
+
+  describe("getOne()", () => {
+    it("should return one movie", async () => {
+      moxios.stubRequest("/movie_details.json?movie_id=1", {
+        response: mockMovieServiceGetOneApiData(),
+      });
+
+      const movie = await movieService.getOne(1);
+      expect(movie).toEqual(mockMovies()[0]);
+    });
+
+    it("should return undefined when id equals to 0", async () => {
+      moxios.stubRequest("/movie_details.json?movie_id=999999", {
+        response: { movie: { id: 0 } },
+      });
+
+      const movie = await movieService.getOne(999_999);
+      expect(movie).toBeUndefined();
     });
   });
 });

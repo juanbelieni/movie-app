@@ -17,8 +17,7 @@ export const movieStore: IMovieStore = {
   getters: {
     movies: (state: IMovieStoreState) => state.movies,
 
-    movie: (state: IMovieStoreState) => (id: number) =>
-      state.movies.find((movie: IMovie) => movie.id === id),
+    movie: (state: IMovieStoreState) => state.movie,
 
     isFetching: (state: IMovieStoreState) => state.isFetching,
   },
@@ -30,6 +29,10 @@ export const movieStore: IMovieStore = {
 
     appendMovies(state: IMovieStoreState, payload: Array<IMovie>) {
       payload.forEach((movie: IMovie) => state.movies.push(movie));
+    },
+
+    setMovie(state: IMovieStoreState, payload?: IMovie) {
+      state.movie = payload;
     },
 
     setPage(state: IMovieStoreState, payload: number) {
@@ -59,6 +62,21 @@ export const movieStore: IMovieStore = {
       context.commit("appendMovies", movies);
       context.commit("setPage", page);
       context.commit("setIsFetching", false);
+    },
+
+    async fetchMovie(context: IMovieStoreContext, id: number) {
+      context.commit("setMovie", undefined);
+
+      const cachedMovie = context.state.movies.find(
+        (movie: IMovie) => movie.id === id
+      );
+
+      if (cachedMovie) {
+        context.commit("setMovie", cachedMovie);
+      } else {
+        const movie = await this.$services.movie.getOne(id);
+        context.commit("setMovie", movie);
+      }
     },
   },
 };

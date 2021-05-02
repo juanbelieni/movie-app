@@ -12,8 +12,9 @@ import { IStore, IStoreState } from "@/store";
 
 export interface IMovieStoreState {
   movies: Array<IMovie>;
-  isFetching: boolean;
+  movie?: IMovie;
   page: number;
+  isFetching: boolean;
 }
 
 // Getters
@@ -21,17 +22,18 @@ export interface IMovieStoreState {
 export interface IMovieStoreGetters
   extends GetterTree<IMovieStoreState, IStoreState> {
   movies: (state: IMovieStoreState) => Array<IMovie>;
-  movie: (state: IMovieStoreState) => (id: number) => IMovie | undefined;
+  movie: (state: IMovieStoreState) => IMovie | undefined;
   isFetching: (state: IMovieStoreState) => boolean;
 }
 
 // Mutations
 
 export interface IMovieStoreMutations extends MutationTree<IMovieStoreState> {
+  setMovies: (state: IMovieStoreState, payload: Array<IMovie>) => void;
   appendMovies: (state: IMovieStoreState, payload: Array<IMovie>) => void;
+  setMovie: (state: IMovieStoreState, payload: IMovie) => void;
   setPage: (state: IMovieStoreState, payload: number) => void;
   setIsFetching: (state: IMovieStoreState, payload: boolean) => void;
-  setMovies: (state: IMovieStoreState, payload: Array<IMovie>) => void;
 }
 
 // Actions
@@ -45,6 +47,11 @@ export interface IMovieStoreActions
     this: IStore,
     context: IMovieStoreContext,
     search?: string
+  ) => Promise<void>;
+  fetchMovie: (
+    this: IStore,
+    context: IMovieStoreContext,
+    id: number
   ) => Promise<void>;
 }
 

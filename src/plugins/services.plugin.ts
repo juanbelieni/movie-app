@@ -1,9 +1,9 @@
 import { Plugin } from "vue";
-import { MovieService } from "@/modules/movie";
+import { IMovieService, MovieService } from "@/modules/movie";
 import { api } from "@/config/api.config";
 
 export interface IServices {
-  movie: MovieService;
+  movie: IMovieService;
 }
 
 export const services: Plugin = {

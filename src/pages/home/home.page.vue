@@ -11,6 +11,7 @@ export default defineComponent({
   },
 
   created() {
+    this.$store.dispatch("movie/clearMovies");
     this.loadMoreMovies();
   },
 
@@ -59,25 +60,28 @@ export default defineComponent({
     loadMoreMovies() {
       this.$store.dispatch("movie/fetchMovies", this.search);
     },
+
+    handleNavigateToMoviePage(id: number) {
+      this.$router.push(`/${id}`);
+    },
   },
 });
 </script>
 
 <template>
   <el-container id="home-page">
-    <el-input
-      v-model="search"
-      :debounce="2000"
-      class="search-field"
-      placeholder="Search"
-      prefix-icon="el-icon-search"
-      :disabled="isFetchingMovies"
-    />
+    <el-container class="header">
+      <el-input
+        v-model="search"
+        :debounce="2000"
+        class="search-field"
+        placeholder="Search"
+        prefix-icon="el-icon-search"
+        :disabled="isFetchingMovies"
+      />
+    </el-container>
 
-    <el-container
-      class="movies-list"
-      v-if="!isFetchingMovies && movies.length > 0"
-    >
+    <el-container class="movies-list" v-if="movies.length > 0">
       <el-card
         v-for="movie in movies"
         :key="movie.id"
@@ -89,6 +93,7 @@ export default defineComponent({
           :alt="movie.title"
           class="movie-card-image"
           draggable="false"
+          @click="handleNavigateToMoviePage(movie.id)"
         />
         <div class="movie-card-body">
           <p class="movie-card-title">{{ movie.title }}</p>
@@ -109,19 +114,24 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
 
-  padding: 2rem 1rem;
+  .header {
+    background-color: white;
+    width: 100%;
 
-  .search-field {
-    max-width: 20rem;
-    margin-bottom: 2rem;
-    margin-left: auto;
+    padding: 1.5rem 1rem 0;
+
+    .search-field {
+      max-width: 20rem;
+    }
   }
 
   .movies-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-    gap: 2rem 1rem;
     justify-content: space-between;
+    gap: 2rem 1rem;
+
+    padding: 1rem 1rem;
 
     .movie-card {
       border-radius: 8px;

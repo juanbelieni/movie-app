@@ -1,6 +1,8 @@
 import { Movie } from "./movie.model";
 import {
+  IMovie,
   IMovieService,
+  IMovieServiceGetOneApiData,
   IMovieServiceGetPagedApiData,
   IMovieServiceGetPagedPayload,
   IMovieServiceGetPagedResponse,
@@ -35,6 +37,7 @@ export class MovieService implements IMovieService {
           title: movie.title,
           year: movie.year,
           rating: movie.rating / 2,
+          slug: movie.slug,
           genres: movie.genres,
           covers: {
             small: movie.small_cover_image,
@@ -49,5 +52,33 @@ export class MovieService implements IMovieService {
       page: data.page_number,
       movies,
     };
+  }
+
+  async getOne(id: number): Promise<IMovie | undefined> {
+    const response = await this.api.get<IMovieServiceGetOneApiData>(
+      "/movie_details.json",
+      {
+        params: { movie_id: id },
+      }
+    );
+
+    const data = response.data;
+
+    if (data.movie.id !== 0) {
+      return new Movie({
+        id: data.movie.id,
+        title: data.movie.title,
+        year: data.movie.year,
+        rating: data.movie.rating / 2,
+        slug: data.movie.slug,
+        genres: data.movie.genres,
+        covers: {
+          small: data.movie.small_cover_image,
+          medium: data.movie.medium_cover_image,
+          large: data.movie.large_cover_image,
+        },
+        trailerId: data.movie.yt_trailer_code,
+      });
+    }
   }
 }
